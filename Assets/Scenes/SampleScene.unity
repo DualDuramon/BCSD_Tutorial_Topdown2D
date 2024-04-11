@@ -280,6 +280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   talkManager: {fileID: 184548972}
   talkPanel: {fileID: 376940562}
+  portraitImg: {fileID: 891264365}
   talkText: {fileID: 1522871603}
   scanObject: {fileID: 0}
   isAction: 0
@@ -328,6 +329,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82388a5d1a012cc4bb389976addaae52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  portraitArr:
+  - {fileID: 292507246, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: 1544503544, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: -70192420, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: 972300726, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: -1300456185, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: -655609955, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: -2041334015, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
+  - {fileID: 2142023694, guid: d79edf18a76e2654a9ac99f15de8b2b3, type: 3}
 --- !u!4 &184548973
 Transform:
   m_ObjectHideFlags: 0
@@ -360,7 +370,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &376940563
 RectTransform:
   m_ObjectHideFlags: 0
