@@ -5,8 +5,9 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    //°ñµå¸ÞÅ» À¯´ÏÆ¼ °­ÁÂ B22 ~B23
+    //°ñµå¸ÞÅ» À¯´ÏÆ¼ °­ÁÂ B27
     public TalkManager talkManager;
+    public QuestManager questManager;
     public GameObject talkPanel;
     public Image portraitImg;
 
@@ -15,6 +16,9 @@ public class GameManager : MonoBehaviour
     public bool isAction;
     public int talkIndex;
 
+    void Start() {
+        Debug.Log(questManager.CheckQuest());
+    }
     public void Action(GameObject scanObj) {
         
         ObjData objData = scanObj.GetComponent<ObjData>();
@@ -25,17 +29,22 @@ public class GameManager : MonoBehaviour
     }
 
     void Talk(int id, bool isNpc) {
-        string talkData = talkManager.GetTalk(id, talkIndex);
+        int questTalkIndex = questManager.GetQuestTalkIndex(id);
+        string talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
 
+        //end Talk
         if (talkData == null) { //´ëÈ­°¡ ¸ðµÎ ³¡³µÀ»¶§ ÀÏ½ÃÁ¤Áö ÇØÁ¦
             isAction = false;
             talkIndex = 0;
+            Debug.Log(questManager.CheckQuest(id));
             return;
         }
 
+        //continue talk
         if (isNpc) {
             talkText.text = talkData.Split(':')[0];
 
+            //show Portrait
             portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
             portraitImg.color = new Color(1, 1, 1, 1);
         }
