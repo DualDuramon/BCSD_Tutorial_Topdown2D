@@ -5,13 +5,15 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    //°ñµå¸ÞÅ» À¯´ÏÆ¼ °­ÁÂ B27
+    //°ñµå¸ÞÅ» À¯´ÏÆ¼ °­ÁÂ B28
     public TalkManager talkManager;
     public QuestManager questManager;
-    public GameObject talkPanel;
+    public Animator talkPanel;
+    public Animator PortraitAnim;
+    public Sprite prevPortrait;
     public Image portraitImg;
 
-    public Text talkText;
+    public TypeEffect talk;
     public GameObject scanObject;
     public bool isAction;
     public int talkIndex;
@@ -19,18 +21,28 @@ public class GameManager : MonoBehaviour
     void Start() {
         Debug.Log(questManager.CheckQuest());
     }
+
     public void Action(GameObject scanObj) {
         
         ObjData objData = scanObj.GetComponent<ObjData>();
         //talkText.text = $"{scanObject.name} ´Ù.";
         Talk(objData.id, objData.isNpc);
 
-        talkPanel.SetActive(isAction);
+        talkPanel.SetBool("isShow", isAction);
     }
 
     void Talk(int id, bool isNpc) {
-        int questTalkIndex = questManager.GetQuestTalkIndex(id);
-        string talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
+        int questTalkIndex = 0;
+        string talkData = "";
+
+        if (talk.isAnimation) {
+            talk.SetMsg("");
+            return;
+        }
+        else {
+            questTalkIndex = questManager.GetQuestTalkIndex(id);
+            talkData = talkManager.GetTalk(id + questTalkIndex, talkIndex);
+        }
 
         //end Talk
         if (talkData == null) { //´ëÈ­°¡ ¸ðµÎ ³¡³µÀ»¶§ ÀÏ½ÃÁ¤Áö ÇØÁ¦
@@ -42,15 +54,21 @@ public class GameManager : MonoBehaviour
 
         //continue talk
         if (isNpc) {
-            talkText.text = talkData.Split(':')[0];
+            talk.SetMsg(talkData.Split(':')[0]);
 
             //show Portrait
             portraitImg.sprite = talkManager.GetPortrait(id, int.Parse(talkData.Split(':')[1]));
             portraitImg.color = new Color(1, 1, 1, 1);
+            
+            //Animation Portrait
+            if(prevPortrait != portraitImg.sprite) {
+                PortraitAnim.SetTrigger("doEffect");
+                prevPortrait = portraitImg.sprite;
+            }
         }
         else {
-            talkText.text = talkData;
-            portraitImg.color = new Color(0, 0, 0, 0);
+            talk.SetMsg(talkData);
+            portraitImg.color = new Color(1, 1, 1, 0);
         }
 
         isAction = true;
