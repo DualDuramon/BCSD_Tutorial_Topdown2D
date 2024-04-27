@@ -4,16 +4,32 @@ using UnityEngine;
 
 public class PlayerAction : MonoBehaviour
 {
-    //°ñµå¸ÞÅ» À¯´ÏÆ¼ °­ÁÂ B22
+    //°ñµå¸ÞÅ» À¯´ÏÆ¼ °­ÁÂ B24
     public float speed;
-    Rigidbody2D rigid;
+    public GameManager manager;
     float h;
     float v;
     bool isHorizonMove;
-    Animator anim;
     Vector3 dirVec;
+    Rigidbody2D rigid;
+    Animator anim;
     GameObject scanObj;
-    public GameManager manager;
+
+    //Mobile Key
+    int up_Value;
+    int down_Value;
+    int left_Value;
+    int right_Value;
+    bool up_Down;
+    bool down_Down;
+    bool left_Down;
+    bool right_Down;
+    bool up_Up;
+    bool down_Up;
+    bool left_Up;
+    bool right_Up;
+
+
 
     void Awake() {
         rigid = GetComponent<Rigidbody2D>();
@@ -23,14 +39,16 @@ public class PlayerAction : MonoBehaviour
     void Update() {
 
         //move value
-        h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal");
-        v = manager.isAction ? 0 : Input.GetAxisRaw("Vertical");
+        //PC, Mobile
+        h = manager.isAction ? 0 : Input.GetAxisRaw("Horizontal") + right_Value + left_Value;
+        v = manager.isAction ? 0 : Input.GetAxisRaw("Vertical") + up_Value + down_Value;
 
         //check buttons
-        bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal");
-        bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical");
-        bool hUp = manager.isAction ? false : Input.GetButtonUp("Horizontal");
-        bool vUp = manager.isAction ? false : Input.GetButtonUp("Vertical");
+        //PC, Mobile
+        bool hDown = manager.isAction ? false : Input.GetButtonDown("Horizontal") || right_Down || left_Down;
+        bool vDown = manager.isAction ? false : Input.GetButtonDown("Vertical") || up_Down || down_Down;
+        bool hUp = manager.isAction ? false : Input.GetButtonUp("Horizontal") || right_Up || left_Up;
+        bool vUp = manager.isAction ? false : Input.GetButtonUp("Vertical") || up_Up || down_Up;
 
         //check horizontal move
         if (hDown) {
@@ -70,6 +88,16 @@ public class PlayerAction : MonoBehaviour
         if (Input.GetButtonDown("Jump") && scanObj != null) {
             manager.Action(scanObj);
         }
+
+        //Mobile Var Initiate
+        up_Down = false;
+        down_Down = false;
+        left_Down = false;
+        right_Down = false;
+        up_Up = false;
+        down_Up = false;
+        left_Up = false;
+        right_Up = false;
     }
 
     void FixedUpdate() {
@@ -87,5 +115,53 @@ public class PlayerAction : MonoBehaviour
         else {
             scanObj = null;
         } 
+    }
+
+    public void ButtonDown(string type) {
+        switch (type) {
+            case "U":
+                up_Value = 1;
+                up_Down = true;
+                break;
+            case "D":
+                down_Value = -1;
+                down_Down = true;
+                break;
+            case "L":
+                left_Value = -1;
+                left_Down = true;
+                break;
+            case "R":
+                right_Value = 1;
+                right_Down = true;
+                break;
+            case "A":
+                if (scanObj != null) manager.Action(scanObj);
+                break;
+            case "C":
+                manager.SubMenuActive();
+                break;
+        }
+    }
+
+    public void ButtonUp(string type) {
+        switch (type) {
+            case "U":
+                up_Value = 0;
+                up_Up = true;
+                break;
+            case "D":
+                down_Value = 0;
+                down_Up = true;
+                break;
+            case "L":
+                left_Value = 0;
+                left_Up = true;
+                break;
+            case "R":
+                right_Value = 0;
+                right_Up = true;
+                break;
+        }
     }
 }
